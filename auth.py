@@ -1,5 +1,5 @@
 from flask import jsonify, request, make_response
-from models import User
+from models import User, Role
 import jwt
 import uuid
 import datetime
@@ -37,8 +37,8 @@ def register_user():
         return make_response('You signup befor', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
 
     hashed_password = generate_password_hash(data['password'], method='sha256')
-
-    new_user = User(public_id=str(uuid.uuid4()), user_name=data['user_name'], password=hashed_password, email=data['email'], role='user')
+    user_role = Role.query.filter_by(name='USER').first()
+    new_user = User(public_id=str(uuid.uuid4()), user_name=data['user_name'], password=hashed_password, email=data['email'], role=user_role)
     db.session.add(new_user)
     db.session.commit()
 
