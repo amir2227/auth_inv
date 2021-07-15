@@ -7,14 +7,15 @@ from app import app, db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-@app.route('/login')
+@app.route('/login', methods=['POST'])
 def login():
-    passwrd = request.args['password']
-    username = request.args['username']
-    if not username or not passwrd:
+    data = request.get_json()
+    passwrd = data['password']
+    email = data['email']
+    if not email or not passwrd:
         return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
 
-    user = User.query.filter_by(user_name=username).first()
+    user = User.query.filter_by(email=email).first()
 
     if not user:
         return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
