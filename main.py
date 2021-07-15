@@ -2,7 +2,7 @@ from app import app
 from flask import jsonify, request
 from functools import wraps
 from models import User
-import auth, config
+import user_management, auth, config
 import jwt
 
 def token_required(f):
