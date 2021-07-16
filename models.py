@@ -25,4 +25,3 @@ role3 = Role(id=4, name='PROUSER')
 roles = [role, role1, role2, role3]
 db.session.add_all(roles)
 db.session.commit()
-

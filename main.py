@@ -44,7 +44,7 @@ def get_database_connection():
 @token_required
 def gdp(current_user):
     try:
-        arg = request.args['field'] 
+        arg = request.args['field']
         db = get_database_connection()
         cur = db.cursor()
         cur.execute('SELECT d_date,{} FROM GDP'.format(arg))

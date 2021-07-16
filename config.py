@@ -5,4 +5,4 @@ SECRET_KEY = "fhafl$#$<G$4343$@24FSSGssggs"
 MYSQL_HOST = 'localhost'
 MYSQL_USERNAME = 'amir2227'
 MYSQL_PASSWORD = '5620027546'
-MYSQL_DB_NAME = 'test'
+MYSQL_DB_NAME = 'inv_skills'
