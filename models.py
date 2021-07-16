@@ -17,7 +17,6 @@ class Role(db.Model):
     users = db.relationship('User', backref='role')
 
 
-'''
 db.create_all()
 role = Role(id=1, name='OWNER')
 role1 = Role(id=2, name='ADMIN')
@@ -26,4 +25,4 @@ role3 = Role(id=4, name='PROUSER')
 roles = [role, role1, role2, role3]
 db.session.add_all(roles)
 db.session.commit()
-'''
+

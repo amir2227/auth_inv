@@ -127,7 +127,7 @@ def ir(current_user):
 @token_required
 def find_by_date(current_user):
     try:
-        arg = request.args['data'] 
+        arg = request.args['field']
         d_date = request.args['date']
         db = get_database_connection()
         cur = db.cursor()
