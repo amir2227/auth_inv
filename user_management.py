@@ -29,27 +29,26 @@ def token_required(f):
     return decorated
 
 
-@app.route('/create_user', methods=['POST'])
+@app.route('/api/v0/admin/create_user', methods=['POST'])
 @token_required
 def create_user(current_user):
-    if not current_user.role_id != 1 or not current_user.role_id != 2:
+    if not current_user.role.name == 'ADMIN' or not current_user.role.name == 'OWNER':
         return jsonify({'message': 'Cannot perform that function!'})
 
     data = request.get_json()
 
     hashed_password = generate_password_hash(data['password'], method='sha256')
-
-    new_user = User(public_id=str(uuid.uuid4()), user_name=data['user_name'], password=hashed_password, email=data['email'], role='user')
+    role = Role.query.filter_by(name=data['role']).first()
+    new_user = User(public_id=str(uuid.uuid4()), user_name=data['user_name'], password=hashed_password, email=data['email'], role=role)
     db.session.add(new_user)
     db.session.commit()
 
     return jsonify({'message': 'New user created!'})
 
 
-@app.route('/get_all_user', methods=['GET'])
+@app.route('/api/v0/admin/get_all_user', methods=['GET'])
 @token_required
 def get_all_users(current_user):
-
     if not current_user.role.name == 'OWNER' and not current_user.role.name == 'ADMIN':
         return jsonify({'message': 'Cannot perform that function!'})
 
@@ -69,7 +68,7 @@ def get_all_users(current_user):
     return jsonify({'users': output})
 
 
-@app.route('/promote_user')
+@app.route('/api/v0/admin/promote_user')
 @token_required
 def promote_user(current_user):
     if not current_user.role.name == 'OWNER' and not current_user.role.name == 'ADMIN':
