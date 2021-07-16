@@ -49,6 +49,7 @@ def create_user(current_user):
 @app.route('/api/v0/admin/get_all_user', methods=['GET'])
 @token_required
 def get_all_users(current_user):
+    print(current_user.role.name)
     if not current_user.role.name == 'OWNER' and not current_user.role.name == 'ADMIN':
         return jsonify({'message': 'Cannot perform that function!'})
 

@@ -41,8 +41,7 @@ def get_database_connection():
 
 
 @app.route('/api/v0/GDP')
-@token_required
-def gdp(current_user):
+def gdp():
     try:
         arg = request.args['field']
         db = get_database_connection()
@@ -61,8 +60,7 @@ def gdp(current_user):
         cur.close()
 
 @app.route('/api/v0/COT')
-@token_required
-def cot(current_user):
+def cot():
     try:
         arg = request.args['field']
         db = get_database_connection()
@@ -82,8 +80,7 @@ def cot(current_user):
 
 
 @app.route('/api/v0/E_SCORE')
-@token_required
-def EScore(current_user):
+def EScore():
     try:
         arg = request.args['field']
         db = get_database_connection()
@@ -103,8 +100,7 @@ def EScore(current_user):
 
 
 @app.route('/api/v0/IR')
-@token_required
-def ir(current_user):
+def ir():
     try:
         arg = request.args['field']
         db = get_database_connection()
@@ -124,8 +120,7 @@ def ir(current_user):
 
 
 @app.route('/api/v0/date')
-@token_required
-def find_by_date(current_user):
+def find_by_date():
     try:
         arg = request.args['field']
         d_date = request.args['date']
@@ -146,8 +141,7 @@ def find_by_date(current_user):
 
 
 @app.route('/api/v0/forex_get_all')
-@token_required
-def test(current_user):
+def test():
     try:
         json_data_ir = {}
         json_data_gdp = {}
