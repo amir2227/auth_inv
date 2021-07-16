@@ -42,7 +42,7 @@ def get_database_connection():
 
 @app.route('/api/v0/GDP')
 @token_required
-def gdp():
+def gdp(current_user):
     try:
         arg = request.args['field'] 
         db = get_database_connection()
@@ -62,7 +62,7 @@ def gdp():
 
 @app.route('/api/v0/COT')
 @token_required
-def cot():
+def cot(current_user):
     try:
         arg = request.args['field']
         db = get_database_connection()
@@ -83,7 +83,7 @@ def cot():
 
 @app.route('/api/v0/E_SCORE')
 @token_required
-def EScore():
+def EScore(current_user):
     try:
         arg = request.args['field']
         db = get_database_connection()
@@ -104,7 +104,7 @@ def EScore():
 
 @app.route('/api/v0/IR')
 @token_required
-def ir():
+def ir(current_user):
     try:
         arg = request.args['field']
         db = get_database_connection()
@@ -125,7 +125,7 @@ def ir():
 
 @app.route('/api/v0/date')
 @token_required
-def find_by_date():
+def find_by_date(current_user):
     try:
         arg = request.args['data'] 
         d_date = request.args['date']
