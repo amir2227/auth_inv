@@ -189,4 +189,4 @@ def test(current_user):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='192.168.90.50', debug=True)
