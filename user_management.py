@@ -54,7 +54,7 @@ def get_all_users(current_user):
         return jsonify({'message': 'Cannot perform that function!'})
 
     users = User.query.all()
-
+    print(current_user.role.name)
     output = []
 
     for user in users:
@@ -69,17 +69,24 @@ def get_all_users(current_user):
     return jsonify({'users': output})
 
 
-@app.route('/promote_user/<email>/<role_name>', methods=['PUT'])
+@app.route('/promote_user')
 @token_required
-def promote_user(current_user, email, role_name):
-    if not current_user.role.name == 'ADMIN' and not current_user.role.name == 'OWNER':
+def promote_user(current_user):
+    if not current_user.role.name == 'OWNER' and not current_user.role.name == 'ADMIN':
         return jsonify({'message': 'Cannot perform that function!'})
-
+    email = str(request.args.get('email'))
+    role_name = str(request.args.get('role_name'))
+    print( f'role name request {role_name}')
+    print(current_user.role.name)
+    print(email)
+    print(f'curent user --> {current_user.role_id}')
     user = User.query.filter_by(email=email).first()
-
+    print(user)
     if not user:
         return jsonify({'message': 'No user found!'})
-    role = Role.query.filter_by(name=role_name)
+    role = Role.query.filter_by(name=role_name).first()
+    print(role.name)
+
     user.role = role
     db.session.commit()
 
