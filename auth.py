@@ -7,7 +7,7 @@ from app import app, db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/api/v0/login', methods=['POST'])
 def login():
     data = request.get_json()
     passwrd = data['password']
@@ -28,7 +28,7 @@ def login():
     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
 
 
-@app.route('/register', methods=['POST'])
+@app.route('/api/v0/register', methods=['POST'])
 def register_user():
     data = request.get_json()
     user = User.query.filter_by(email=data['email']).first()
