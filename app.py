@@ -7,5 +7,5 @@ app.config['SECRET_KEY'] = config.SECRET_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{config.MYSQL_USERNAME}:{config.MYSQL_PASSWORD}@{config.MYSQL_HOST}/{config.MYSQL_DB_NAME}'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = True
-
+app.config["UPLOAD_FOLDER"] = config.UPLOAD_FOLDER
 db = SQLAlchemy(app)

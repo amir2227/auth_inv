@@ -76,10 +76,6 @@ def promote_user(current_user):
         return jsonify({'message': 'Cannot perform that function!'})
     email = str(request.args.get('email'))
     role_name = str(request.args.get('role_name'))
-    print( f'role name request {role_name}')
-    print(current_user.role.name)
-    print(email)
-    print(f'curent user --> {current_user.role_id}')
     user = User.query.filter_by(email=email).first()
     print(user)
     if not user:
