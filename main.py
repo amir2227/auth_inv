@@ -6,6 +6,7 @@ import user_management, auth, config
 import jwt
 import MySQLdb
 from datetime import date
+from werkzeug import secure_filename
 
 
 def token_required(f):
@@ -29,6 +30,10 @@ def token_required(f):
 
     return decorated
 
+
+def allowed_file(filename):
+    """ checks the extension of the passed filename to be in the allowed extensions"""
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in config.ALLOWED_EXTENSIONS
 
 
 def get_database_connection():
@@ -180,6 +185,27 @@ def test():
         return jsonify({'error': f'there is some problem in database {e}'})
     finally:
         cur.close()
+
+@app.route('/api/v0/uploader', methods=['POST'])
+def uploader():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            return jsonify({'message': 'No file part'})
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            return jsonify({'message': 'No selected file'})
+        
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            filename.replace(' ', '_') # no space in filenames! because we will call them as command line arguments
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
+            subprocess.Popen(["python", "import_db.py", file_path])
+            flash('File uploaded. Will be imported soon. follow from DB Status Page', 'info')
+            return redirect('/')
 
 
 if __name__ == "__main__":
