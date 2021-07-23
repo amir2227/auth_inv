@@ -1,8 +1,9 @@
 from pandas import read_excel
-from datetime import datetime
 import numpy as np
 import config
 import MySQLdb
+import sys
+import os
 
 MAX_FLASH = 100
 
@@ -27,7 +28,7 @@ def import_to_database_from_excel(filepath):
 
     try:
         cur.execute('DROP TABLE IF EXISTS logs;')
-        cur.execute("""CREATE TABLE logs (            
+        cur.execute("""CREATE TABLE logs (
             log_name CHAR(200),
             log_value MEDIUMTEXT);
             """)
@@ -157,7 +158,7 @@ def import_to_database_from_excel(filepath):
             gdp_counter += 1
         except Exception as e:
             total_flashes += 1
-            if total_flashes < MAX_FLASH:                
+            if total_flashes < MAX_FLASH:
                 output.append(
                     f'Error inserting line {line_number} from GDP sheet , {e}')
             elif total_flashes == MAX_FLASH:
@@ -229,7 +230,7 @@ def import_to_database_from_excel(filepath):
                 output.append(
                     f'Problem commiting data into db at around record {line_number} (or previous 1000 ones); {e}')
     db.commit()
-     # save the logs
+    # save the logs
     output.append(f'Inserted {score_counter} values to score')
     output.append(f'Inserted {gdp_counter} values to GDP')
     output.append(f'Inserted {cot_counter} values to COT')
@@ -243,4 +244,8 @@ def import_to_database_from_excel(filepath):
     return
 
 
-import_to_database_from_excel('test.xls')
+filepath = sys.argv[1]
+print(filepath)
+import_to_database_from_excel(filepath)
+
+os.remove(filepath)

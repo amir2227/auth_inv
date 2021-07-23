@@ -2,10 +2,13 @@ from app import app
 from flask import jsonify, request
 from functools import wraps
 from models import User
+from datetime import date
+from werkzeug import secure_filename
 import user_management, auth, config
 import jwt
 import MySQLdb
-from datetime import date
+import subprocess
+import os
 
 
 def token_required(f):
@@ -29,6 +32,10 @@ def token_required(f):
 
     return decorated
 
+
+def allowed_file(filename):
+    """ checks the extension of the passed filename to be in the allowed extensions"""
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in config.ALLOWED_EXTENSIONS
 
 
 def get_database_connection():
@@ -182,5 +189,26 @@ def test():
         cur.close()
 
 
+@app.route('/api/v0/uploader', methods=['POST'])
+def uploader():
+    # check if the post request has the file part
+    if 'file' not in request.files:
+        return jsonify({'message': 'No file part'})
+    file = request.files['file']
+    # if user does not select file, browser also
+    # submit an empty part without filename
+    if file.filename == '':
+        return jsonify({'message': 'No selected file'})
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        filename.replace(' ', '_') # no space in filenames! because we will call them as command line arguments
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+        subprocess.Popen(["python", "import_db.py", file_path])
+        return jsonify({'message': 'File uploaded. Will be imported soon'})
+
+    return jsonify({'message': 'your excel file must be in .xls format'})
+
+
 if __name__ == "__main__":
-    app.run(host='192.168.90.50', debug=True)
+    app.run(host='0.0.0.0', debug=True)
