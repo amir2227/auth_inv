@@ -3,7 +3,7 @@ from flask import jsonify, request
 from functools import wraps
 from models import User
 from datetime import date
-from werkzeug import secure_filename
+from werkzeug.utils import secure_filename
 import user_management, auth, config
 import jwt
 import MySQLdb
