@@ -211,4 +211,4 @@ def uploader():
 
 
 if __name__ == "__main__":
-    app.run(host='192.168.90.50', debug=True)
+    app.run(host='0.0.0.0', debug=True)
